@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#iconGradient)"/>
+  
+  <!-- Elephant design -->
+  <g filter="url(#shadow)">
+    <!-- Ears -->
+    <ellipse cx="180" cy="240" rx="60" ry="90" fill="#fff" opacity="0.9"/>
+    <ellipse cx="332" cy="240" rx="60" ry="90" fill="#fff" opacity="0.9"/>
+    
+    <!-- Head -->
+    <circle cx="256" cy="240" r="80" fill="#fff"/>
+    
+    <!-- Eyes -->
+    <circle cx="235" cy="225" r="12" fill="#667eea"/>
+    <circle cx="277" cy="225" r="12" fill="#667eea"/>
+    
+    <!-- Trunk with N shape -->
+    <path d="M 256 280 Q 250 310, 240 340 Q 235 360, 245 370 Q 255 365, 260 345 Q 270 315, 270 290" 
+          fill="#fff" stroke="#667eea" stroke-width="4"/>
+  </g>
+</svg>

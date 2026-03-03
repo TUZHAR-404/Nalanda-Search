@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https:; connect-src *; frame-src *;">
+    <title>Nalanda Search</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+</head>
+<body class="theme-dark">
+    
+    <!-- Settings Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Settings</h2>
+            <button id="closeSidebar" class="close-btn" aria-label="Close settings">×</button>
+        </div>
+        
+        <div class="sidebar-content">
+            <!-- Appearance Section -->
+            <section class="settings-section">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    Appearance
+                </h3>
+                
+                <div class="setting-item">
+                    <label for="themeSelect">Theme</label>
+                    <select id="themeSelect" class="setting-select">
+                        <option value="dark">Dark Mode</option>
+                        <option value="light">Light Mode</option>
+                    </select>
+                </div>
+                
+                <div class="setting-item">
+                    <label for="backgroundType">Background</label>
+                    <select id="backgroundType" class="setting-select">
+                        <option value="solid">Solid Color</option>
+                        <option value="gradient">Gradient</option>
+                        <option value="image">Image</option>
+                    </select>
+                </div>
+                
+                <div class="setting-item" id="solidColorOption">
+                    <label for="backgroundColor">Color</label>
+                    <input type="color" id="backgroundColor" value="#1a1a1a">
+                </div>
+                
+                <div class="setting-item hidden" id="gradientOption">
+                    <label>Gradient Preset</label>
+                    <div class="gradient-presets">
+                        <button class="gradient-btn" data-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></button>
+                        <button class="gradient-btn" data-gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></button>
+                        <button class="gradient-btn" data-gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></button>
+                        <button class="gradient-btn" data-gradient="linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"></button>
+                        <button class="gradient-btn" data-gradient="linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></button>
+                    </div>
+                </div>
+                
+                <div class="setting-item hidden" id="imageOption">
+                    <label for="backgroundImage">Image URL</label>
+                    <input type="text" id="backgroundImage" placeholder="https://example.com/image.jpg" class="setting-input">
+                </div>
+            </section>
+            
+            <!-- Agents Section -->
+            <section class="settings-section">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    Agents
+                </h3>
+                <p class="section-description">Future integration point for n8n agents. Add modular, toggleable agents here.</p>
+                
+                <div id="agentsList" class="agents-list">
+                    <!-- Agents will be dynamically added here -->
+                </div>
+                
+                <button id="addAgent" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Agent
+                </button>
+            </section>
+            
+            <!-- General Settings -->
+            <section class="settings-section">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m9-9h-6M7 12H1m16.24 4.24l-4.24-4.24m0 0L8.76 16.24M16.24 7.76L12 12m0 0L7.76 7.76"></path>
+                    </svg>
+                    General Settings
+                </h3>
+                
+                <div class="setting-item">
+                    <label for="searchEngine">Default Search Engine</label>
+                    <select id="searchEngine" class="setting-select">
+                        <option value="duckduckgo">DuckDuckGo (Privacy-focused)</option>
+                        <option value="google">Google</option>
+                        <option value="bing">Bing</option>
+                        <option value="brave">Brave Search</option>
+                        <option value="ecosia">Ecosia (Eco-friendly)</option>
+                    </select>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="openInBrowser">
+                        <span>Open results in default browser</span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="privacyMode" checked>
+                        <span>Privacy mode (no telemetry)</span>
+                    </label>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Header with Settings Button -->
+        <div class="header">
+            <button id="settingsBtn" class="settings-icon" aria-label="Open settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6M7 12H1"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <img src="assets/logo.svg" alt="Nalanda Search Logo" class="logo">
+        </div>
+        
+        <!-- Search Section -->
+        <div class="search-container">
+            <form id="searchForm" class="search-form">
+                <div class="search-bar">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Search the web with wisdom..."
+                        autocomplete="off"
+                        aria-label="Search input"
+                    >
+                    <button 
+                        type="button" 
+                        id="micBtn" 
+                        class="mic-btn" 
+                        aria-label="Voice search"
+                        title="Click to speak"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </button>
+                    <button 
+                        type="submit" 
+                        class="search-btn" 
+                        aria-label="Search"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="voiceStatus" class="voice-status hidden">Listening...</div>
+            </form>
+            
+            <!-- Keyboard Shortcuts Hint -->
+            <div class="shortcuts-hint">
+                Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to focus search • <kbd>Ctrl</kbd> + <kbd>,</kbd> for settings
+            </div>
+        </div>
+        
+        <!-- Search Results Area -->
+        <div id="resultsContainer" class="results-container hidden">
+            <div class="results-header">
+                <button id="closeResults" class="btn-secondary">← Back to Search</button>
+            </div>
+            <webview 
+                id="resultsWebview" 
+                class="results-webview"
+                partition="persist:nalanda"
+                allowpopups
+                useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36">
+            </webview>
+        </div>
+    </div>
+    
+    <!-- Agent Modal -->
+    <div id="agentModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Add New Agent</h2>
+            <form id="agentForm">
+                <div class="form-group">
+                    <label for="agentName">Agent Name</label>
+                    <input type="text" id="agentName" required placeholder="e.g., Web Scraper">
+                </div>
+                <div class="form-group">
+                    <label for="agentDescription">Description</label>
+                    <textarea id="agentDescription" rows="3" placeholder="What does this agent do?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="agentEndpoint">n8n Webhook URL (optional)</label>
+                    <input type="url" id="agentEndpoint" placeholder="https://your-n8n-instance.com/webhook/...">
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelAgent" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Agent</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+</html>
