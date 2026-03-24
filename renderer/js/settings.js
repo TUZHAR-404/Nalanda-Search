@@ -15,7 +15,7 @@ function initializeSettings() {
 // Load settings from storage
 async function loadSettings() {
     try {
-        currentSettings = await window.electronAPI.getSettings();
+        currentSettings = await window.StorageAPI.getSettings();
         populateSettingsUI();
     } catch (error) {
         console.error('Error loading settings:', error);
@@ -41,9 +41,11 @@ function populateSettingsUI() {
     const searchEngine = document.getElementById('searchEngine');
     searchEngine.value = currentSettings.searchEngine || 'duckduckgo';
     
-    // Open in browser
-    const openInBrowser = document.getElementById('openInBrowser');
-    openInBrowser.checked = currentSettings.openInBrowser || false;
+    // Privacy mode
+    const privacyMode = document.getElementById('privacyMode');
+    if (privacyMode) {
+        privacyMode.checked = currentSettings.privacyMode !== false;
+    }
 }
 
 // Setup settings event listeners
@@ -102,12 +104,13 @@ function setupSettingsEventListeners() {
         window.App.notify(`Search engine: ${engine}`, 'success');
     });
     
-    // Open in browser toggle
-    document.getElementById('openInBrowser').addEventListener('change', async (e) => {
-        const value = e.target.checked;
-        await saveSetting('openInBrowser', value);
-        window.Search.updateOpenInBrowser(value);
-    });
+    // Privacy mode toggle
+    const privacyMode = document.getElementById('privacyMode');
+    if (privacyMode) {
+        privacyMode.addEventListener('change', async (e) => {
+            await saveSetting('privacyMode', e.target.checked);
+        });
+    }
     
     // Agent management
     document.getElementById('addAgent').addEventListener('click', showAgentModal);
@@ -176,7 +179,7 @@ async function applyBackgroundSetting(bgType) {
 async function saveSetting(key, value) {
     try {
         currentSettings[key] = value;
-        await window.electronAPI.saveSettings({ [key]: value });
+        await window.StorageAPI.saveSettings({ [key]: value });
         console.log(`Setting saved: ${key} = ${value}`);
     } catch (error) {
         console.error('Error saving setting:', error);
@@ -191,7 +194,7 @@ async function saveSetting(key, value) {
 // Load agents
 async function loadAgents() {
     try {
-        agents = await window.electronAPI.getAgents();
+        agents = await window.StorageAPI.getAgents();
         renderAgents();
     } catch (error) {
         console.error('Error loading agents:', error);
@@ -307,7 +310,7 @@ async function deleteAgent(index) {
 // Save agents to storage
 async function saveAgents() {
     try {
-        await window.electronAPI.saveAgents(agents);
+        await window.StorageAPI.saveAgents(agents);
     } catch (error) {
         console.error('Error saving agents:', error);
         window.App.notify('Failed to save agents', 'error');

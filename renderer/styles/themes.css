@@ -9,6 +9,7 @@
 body.theme-dark {
     background: #1a1a1a;
     color: #e0e0e0;
+    --results-bg: #0f1115;
 }
 
 body.theme-dark .sidebar {
@@ -79,6 +80,118 @@ body.theme-dark .shortcuts-hint kbd {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
+body.theme-dark .results-header {
+    background: rgba(15, 17, 21, 0.95);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.theme-dark .results-view-controls {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.theme-dark .results-view-btn.active {
+    background: rgba(123, 181, 217, 0.3);
+    color: #d7efff;
+}
+
+body.theme-dark .result-item {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.theme-dark .result-title {
+    color: #e6e6e6;
+}
+
+body.theme-dark .result-url {
+    color: #7bb5d9;
+}
+
+body.theme-dark .result-snippet {
+    color: #b0b0b0;
+}
+
+body.theme-dark .result-domain {
+    background: rgba(123, 181, 217, 0.18);
+    color: #b6ddf5;
+}
+
+body.theme-dark .result-score {
+    color: #9eb3c6;
+}
+
+body.theme-dark .result-rankbar {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+body.theme-dark .result-open-link {
+    color: #b6ddf5;
+    background: rgba(123, 181, 217, 0.18);
+    border-color: rgba(123, 181, 217, 0.35);
+}
+
+body.theme-dark .result-open-link:hover {
+    background: rgba(123, 181, 217, 0.28);
+}
+
+body.theme-dark .result-action-btn {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    color: #d2d2d2;
+}
+
+body.theme-dark .result-action-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+body.theme-dark .result-item.is-selected {
+    box-shadow: 0 0 0 2px rgba(123, 181, 217, 0.45), 0 14px 35px rgba(0, 0, 0, 0.35);
+}
+
+body.theme-dark .meta-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #d2d2d2;
+}
+
+body.theme-dark .snippet-preview-dialog {
+    background: #1f232b;
+    color: #d6dde6;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.theme-dark .snippet-preview-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.theme-dark .snippet-preview-close {
+    color: #d6dde6;
+}
+
+body.theme-dark .snippet-preview-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.theme-dark .snippet-preview-link {
+    color: #9fd2f1;
+}
+
+body.theme-dark .results-empty {
+    color: #9a9a9a;
+}
+
+body.theme-dark .crawl-progress {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+body.theme-dark .reset-btn {
+    background: rgba(229, 62, 62, 0.2);
+    color: #ffb4b4;
+}
+
 body.theme-dark .modal-content {
     background: #2a2a2a;
     color: #e0e0e0;
@@ -117,6 +230,7 @@ body.theme-dark .form-group textarea:focus {
 body.theme-light {
     background: #f5f5f5;
     color: #1a1a1a;
+    --results-bg: #f5f5f5;
 }
 
 body.theme-light .sidebar {
@@ -192,6 +306,45 @@ body.theme-light .close-btn {
 body.theme-light .close-btn:hover {
     background: rgba(0, 0, 0, 0.05);
     color: #1a1a1a;
+}
+
+body.theme-light .results-header {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+body.theme-light .result-item {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.theme-light .results-view-controls {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.theme-light .result-action-btn {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+body.theme-light .result-action-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.theme-light .meta-pill {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #2a2a2a;
+}
+
+body.theme-light .crawl-progress {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+body.theme-light .reset-btn {
+    background: rgba(229, 62, 62, 0.12);
+    color: #c53030;
 }
 
 /* ========================================

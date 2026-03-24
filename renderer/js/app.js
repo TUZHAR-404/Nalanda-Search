@@ -15,7 +15,7 @@ async function initializeApp() {
     
     try {
         // Load saved settings
-        AppState.settings = await window.electronAPI.getSettings();
+        AppState.settings = await window.StorageAPI.getSettings();
         console.log('Settings loaded:', AppState.settings);
         
         // Apply saved settings
