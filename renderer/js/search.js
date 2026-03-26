@@ -2,7 +2,7 @@
    NALANDA SEARCH - Search Functionality
    ======================================== */
 
-let currentSearchEngine = 'nalanda';
+let currentSearchEngine = 'webfast';
 const ResultsState = {
     view: 'list',
     selectedIndex: -1
@@ -125,16 +125,17 @@ async function performSearch(query) {
         console.log(`🔍 Searching for: "${query}" using ${currentSearchEngine}`);
         window.App.updateState('isSearching', true);
 
-        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const endpoint = currentSearchEngine === 'webfast' ? '/api/web-search' : '/api/search';
+        const response = await fetch(`${endpoint}?q=${encodeURIComponent(query)}`);
         if (!response.ok) {
             throw new Error('Search request failed');
         }
         const data = await response.json();
         const results = data.results || [];
 
-        if (!results.length) {
+        if (!results.length && currentSearchEngine === 'nalanda') {
             const indexState = await ensureIndexForEmptySearch();
-            if (indexState.running) {
+            if (indexState.running && (indexState.indexed || 0) === 0) {
                 showIndexingResults(query, indexState);
                 return;
             }
@@ -303,7 +304,7 @@ function renderResults(container, results) {
         const title = document.createElement('a');
         title.className = 'result-title';
         title.href = result.url;
-        title.target = '_blank';
+        title.target = '_self';
         title.rel = 'noopener noreferrer';
         title.textContent = result.title || result.url;
 
@@ -338,7 +339,7 @@ function renderResults(container, results) {
         const openLink = document.createElement('a');
         openLink.className = 'result-open-link';
         openLink.href = result.url;
-        openLink.target = '_blank';
+        openLink.target = '_self';
         openLink.rel = 'noopener noreferrer';
         openLink.textContent = 'Open';
 

@@ -4,6 +4,7 @@ import os
 import threading
 import time
 import urllib.parse
+import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from threading import Lock
 from pathlib import Path
@@ -54,6 +55,9 @@ class NalandaHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/api/health"):
             self._send_json(200, {"status": "ok"})
+            return
+        if self.path.startswith("/api/web-search"):
+            self._handle_web_search()
             return
         if self.path.startswith("/api/search"):
             self._handle_search()
@@ -114,6 +118,65 @@ class NalandaHandler(SimpleHTTPRequestHandler):
         finally:
             if conn is not None:
                 conn.close()
+
+    def _handle_web_search(self):
+        parsed = urllib.parse.urlparse(self.path)
+        params = urllib.parse.parse_qs(parsed.query)
+        query = params.get("q", [""])[0].strip()
+        if not query:
+            self._send_json(400, {"error": "Query required"})
+            return
+
+        url = "https://api.duckduckgo.com/?" + urllib.parse.urlencode({
+            "q": query,
+            "format": "json",
+            "no_html": "1",
+            "skip_disambig": "1",
+            "no_redirect": "1",
+        })
+
+        try:
+            request = urllib.request.Request(
+                url,
+                headers={"User-Agent": "NalandaSearchBot/0.1"},
+            )
+            with urllib.request.urlopen(request, timeout=6) as response:
+                payload = json.loads(response.read().decode("utf-8", errors="ignore"))
+
+            results = []
+
+            def collect(items):
+                for item in items:
+                    if not isinstance(item, dict):
+                        continue
+                    nested = item.get("Topics")
+                    if isinstance(nested, list):
+                        collect(nested)
+                        continue
+                    link = item.get("FirstURL")
+                    text = item.get("Text")
+                    if link and text:
+                        results.append({
+                            "url": link,
+                            "title": text.split(" - ")[0][:140],
+                            "snippet": text,
+                            "rank": 1.0,
+                        })
+
+            abstract_url = payload.get("AbstractURL")
+            abstract_text = payload.get("AbstractText")
+            if abstract_url and abstract_text:
+                results.append({
+                    "url": abstract_url,
+                    "title": payload.get("Heading") or abstract_url,
+                    "snippet": abstract_text,
+                    "rank": 2.0,
+                })
+
+            collect(payload.get("RelatedTopics") or [])
+            self._send_json(200, {"results": results[:20]})
+        except Exception as exc:
+            self._send_json(500, {"error": str(exc)})
 
     def _handle_crawl(self):
         payload = self._read_json_body()

@@ -4,7 +4,7 @@ const DEFAULT_SETTINGS = {
     backgroundColor: "#1a1a1a",
     backgroundGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     backgroundImage: "",
-    searchEngine: "nalanda",
+    searchEngine: "webfast",
     privacyMode: true,
     resultsView: "list"
 };
