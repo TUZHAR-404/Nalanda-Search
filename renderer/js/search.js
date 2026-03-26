@@ -130,7 +130,17 @@ async function performSearch(query) {
             throw new Error('Search request failed');
         }
         const data = await response.json();
-        showResults(data.results || [], query);
+        const results = data.results || [];
+
+        if (!results.length) {
+            const indexState = await ensureIndexForEmptySearch();
+            if (indexState.running) {
+                showIndexingResults(query, indexState);
+                return;
+            }
+        }
+
+        showResults(results, query);
         
     } catch (error) {
         console.error('Search error:', error);
@@ -138,6 +148,73 @@ async function performSearch(query) {
     } finally {
         window.App.updateState('isSearching', false);
     }
+}
+
+async function ensureIndexForEmptySearch() {
+    try {
+        const statusResponse = await fetch('/api/crawl-status');
+        if (!statusResponse.ok) {
+            return { running: false };
+        }
+
+        const status = await statusResponse.json();
+        if (status.running) {
+            return {
+                running: true,
+                indexed: status.indexed || 0,
+                maxPages: status.max_pages || 0
+            };
+        }
+
+        if ((status.indexed || 0) > 0) {
+            return { running: false };
+        }
+
+        const crawlResponse = await fetch('/api/crawl', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                max_pages: 300,
+                max_depth: 2
+            })
+        });
+
+        if (crawlResponse.ok || crawlResponse.status === 409) {
+            return { running: true, indexed: status.indexed || 0, maxPages: 300 };
+        }
+
+        return { running: false };
+    } catch (error) {
+        return { running: false };
+    }
+}
+
+function showIndexingResults(query, state) {
+    const resultsContainer = document.getElementById('resultsContainer');
+    const resultsList = document.getElementById('resultsList');
+    const resultsMeta = document.getElementById('resultsMeta');
+    const indexed = state.indexed || 0;
+    const maxPages = state.maxPages || 0;
+    const progressText = maxPages ? `${indexed}/${maxPages}` : `${indexed}`;
+
+    resultsList.innerHTML = `
+        <div class="results-empty">
+            <div class="results-empty-title">Indexing in progress</div>
+            <div class="results-empty-text">The search index is being built (${progressText} pages). Try again in a minute.</div>
+        </div>
+    `;
+
+    resultsMeta.innerHTML = [
+        '<span class="meta-pill">0 results</span>',
+        '<span class="meta-pill">indexing...</span>',
+        `<span class="meta-pill meta-query">${escapeHtml(query)}</span>`
+    ].join('');
+
+    resultsContainer.classList.remove('hidden');
+    resultsList.scrollTop = 0;
+    setSelectedResult(resultsList, -1, false);
 }
 
 // Show results in webview
