@@ -182,7 +182,7 @@ async function ensureIndexForEmptySearch() {
         });
 
         if (crawlResponse.ok || crawlResponse.status === 409) {
-            return { running: true, indexed: status.indexed || 0, maxPages: 300 };
+            return { running: true, indexed: status.indexed || 0, maxPages: 100 };
         }
 
         return { running: false };

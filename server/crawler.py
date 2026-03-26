@@ -4,7 +4,7 @@ import urllib.request
 from collections import deque
 from html.parser import HTMLParser
 
-from .config import USER_AGENT
+from .config import USER_AGENT, DEFAULT_CRAWL_MAX_SECONDS
 from .search_index import get_connection, init_db, upsert_page
 
 
@@ -74,7 +74,7 @@ def _fetch_html(url, timeout=5):
         return content.decode("utf-8", errors="ignore")
 
 
-def crawl(domains, max_pages=200, max_depth=2, progress_cb=None):
+def crawl(domains, max_pages=200, max_depth=2, progress_cb=None, max_run_seconds=DEFAULT_CRAWL_MAX_SECONDS):
     conn = get_connection()
     try:
         init_db(conn)
@@ -88,6 +88,9 @@ def crawl(domains, max_pages=200, max_depth=2, progress_cb=None):
         started = time.time()
 
         while queue and indexed < max_pages:
+            if max_run_seconds and (time.time() - started) >= max_run_seconds:
+                break
+
             url, depth, domain = queue.popleft()
             normalized = _normalize_url(url)
             if not normalized or normalized in visited:
