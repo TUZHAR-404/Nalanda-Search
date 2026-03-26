@@ -62,7 +62,7 @@ def _allowed_domain(host, domain):
     return host.endswith("." + domain)
 
 
-def _fetch_html(url, timeout=10):
+def _fetch_html(url, timeout=5):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         content_type = response.headers.get("Content-Type", "")
@@ -134,7 +134,7 @@ def crawl(domains, max_pages=200, max_depth=2, progress_cb=None):
                         continue
                     queue.append((normalized_link, depth + 1, domain))
 
-            time.sleep(0.2)
+            time.sleep(0.05)
 
         duration = time.time() - started
         return {

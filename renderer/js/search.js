@@ -97,7 +97,7 @@ async function ensureIndexOnLoad() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                max_pages: 300,
+                max_pages: 100,
                 max_depth: 2
             })
         });
@@ -176,7 +176,7 @@ async function ensureIndexForEmptySearch() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                max_pages: 300,
+                max_pages: 100,
                 max_depth: 2
             })
         });
@@ -686,7 +686,7 @@ async function startIndexing(indexBtn, resetBtn, statusEl, onStarted) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                max_pages: 200,
+                max_pages: 100,
                 max_depth: 2
             })
         });
