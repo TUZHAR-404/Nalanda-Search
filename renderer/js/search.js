@@ -125,12 +125,27 @@ async function performSearch(query) {
         console.log(`🔍 Searching for: "${query}" using ${currentSearchEngine}`);
         window.App.updateState('isSearching', true);
 
-        const endpoint = currentSearchEngine === 'webfast' ? '/api/web-search' : '/api/search';
-        const response = await fetch(`${endpoint}?q=${encodeURIComponent(query)}`);
-        if (!response.ok) {
-            throw new Error('Search request failed');
+        let data = null;
+
+        if (currentSearchEngine === 'webfast') {
+            const webResponse = await fetch(`/api/web-search?q=${encodeURIComponent(query)}`);
+            if (webResponse.ok) {
+                data = await webResponse.json();
+            } else {
+                const localResponse = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                if (!localResponse.ok) {
+                    throw new Error('Search request failed');
+                }
+                data = await localResponse.json();
+            }
+        } else {
+            const localResponse = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+            if (!localResponse.ok) {
+                throw new Error('Search request failed');
+            }
+            data = await localResponse.json();
         }
-        const data = await response.json();
+
         const results = data.results || [];
 
         if (!results.length && currentSearchEngine === 'nalanda') {

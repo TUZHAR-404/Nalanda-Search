@@ -113,8 +113,8 @@ class NalandaHandler(SimpleHTTPRequestHandler):
             init_db(conn)
             results = search(conn, query, limit=20)
             self._send_json(200, {"results": results})
-        except Exception as exc:
-            self._send_json(500, {"error": str(exc)})
+        except Exception:
+            self._send_json(200, {"results": []})
         finally:
             if conn is not None:
                 conn.close()
